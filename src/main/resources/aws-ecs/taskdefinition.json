@@ -1,0 +1,36 @@
+{
+  "containerDefinitions":
+  [
+    {
+      "environment" : [
+        {
+          "name": "SERVICE_9997_NAME",
+          "value": "smcdr"
+        },
+        {
+          "name": "SERVICE_9997_CHECK_HTTP",
+          "value": "/smcdr"
+        },
+        {
+          "name": "SERVICE_9997_CHECK_INTERVAL",
+          "value": "10s"
+        },
+        {
+          "name": "SERVICE_TAGS",
+          "value": "http"
+        }
+      ],
+      "name" : "smcdr",
+      "image" : "prateek1411/smcdr:1",
+      "memory":200,
+      "portMappings":[
+        {
+          "containerPort" : 9997,
+          "hostPort" : 8090
+        }
+      ],
+      "essential":true
+    }
+  ],
+  "family":"Camp1-SmcdrServiceTask"
+}

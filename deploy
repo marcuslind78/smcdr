@@ -1,0 +1,6 @@
+#!/bin/bash 
+mvn -s settings.xml clean install
+docker build -t prateek1411/smcdr:1 .
+docker push prateek1411/smcdr:1
+aws ecs register-task-definition --cli-input-json file://src/main/resources/aws-ecs/taskdefinition.json
+aws ecs update-service --cluster Camp1 --service smcdr --task-definition Camp1-smscdrServiceTask 

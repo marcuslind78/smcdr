@@ -1,0 +1,7 @@
+{
+  "serviceName": "SmcdrService",
+  "taskDefinition": "Camp1-SmcdrServiceTask",
+  "desiredCount": 1
+}
+
+
