@@ -12,8 +12,8 @@ import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTable;
  * Data container
  */
 
-@DynamoDBTable(tableName=SmcdrWriter.TABLE_NAME)
-public class SmcdrData {
+@DynamoDBTable(tableName= SmCdrWriter.TABLE_NAME)
+public class SmCdrData {
     private String uuid = UUID.randomUUID().toString();  // This is our primary key, i.e DynamoDB hash key
     private String originator;
     private String destination;

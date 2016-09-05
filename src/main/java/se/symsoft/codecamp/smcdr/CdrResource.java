@@ -28,7 +28,7 @@ public class CdrResource {
     Application app;
 
     private DynamoDBMapper getDynamoDB() {
-        return ((SmcdrWriter) app).getDynamoDB();
+        return ((SmCdrWriter) app).getDynamoDB();
     };
 
 
@@ -40,7 +40,7 @@ public class CdrResource {
     @Produces(MediaType.APPLICATION_JSON)
     @Logged
     public void list(@Suspended final AsyncResponse asyncResponse) {
-        PaginatedScanList<SmcdrData> pageList = getDynamoDB().scan(SmcdrData.class, new DynamoDBScanExpression());
+        PaginatedScanList<SmCdrData> pageList = getDynamoDB().scan(SmCdrData.class, new DynamoDBScanExpression());
         asyncResponse.resume(pageList);
     }
 
@@ -54,7 +54,7 @@ public class CdrResource {
     @Produces(MediaType.APPLICATION_JSON)
     @Logged
     public void create(@Suspended final AsyncResponse asyncResponse,
-                       final SmcdrData data) {
+                       final SmCdrData data) {
         try {
             getDynamoDB().save(data);
             asyncResponse.resume(data);
@@ -78,7 +78,7 @@ public class CdrResource {
     public void create(@Suspended final AsyncResponse asyncResponse,
                        @PathParam("foo") final String foo)  {
         try {
-            asyncResponse.resume(getDynamoDB().load(SmcdrData.class, foo));
+            asyncResponse.resume(getDynamoDB().load(SmCdrData.class, foo));
         } catch (Exception e) {
             e.printStackTrace();
             asyncResponse.resume(e);

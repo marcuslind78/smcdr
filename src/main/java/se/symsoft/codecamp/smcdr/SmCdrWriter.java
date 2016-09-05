@@ -18,7 +18,7 @@ import javax.ws.rs.core.UriBuilder;
 import java.io.IOException;
 import java.net.URI;
 
-public class SmcdrWriter extends ResourceConfig implements Runnable {
+public class SmCdrWriter extends ResourceConfig implements Runnable {
 
     private static final int PORT = 8020;
     static final String TABLE_NAME = "smcdr";
@@ -26,10 +26,9 @@ public class SmcdrWriter extends ResourceConfig implements Runnable {
     private static Regions REGION = Regions.EU_WEST_1;
 
     private DynamoDBMapper dynamoDB;
-    private AmazonSQSClient sqs;
 
 
-    public SmcdrWriter() {
+    public SmCdrWriter() {
         super(CdrResource.class);
         register(RequestLoggingFilter.class);
         register(JacksonJsonProvider.class);
@@ -42,7 +41,6 @@ public class SmcdrWriter extends ResourceConfig implements Runnable {
         // Start SQS receiver
         SqsMessageReceiver sqsMessageReceiver = new SqsMessageReceiver(new AmazonSQSClient().withRegion(REGION), SQS_QUEUE_NAME,dynamoDB);
         new Thread(sqsMessageReceiver).start();
-        
 
         // Start HTTP server
         try {
@@ -71,6 +69,6 @@ public class SmcdrWriter extends ResourceConfig implements Runnable {
     }
 
     public static void main(String[] args) throws IOException, InterruptedException {
-        new Thread(new SmcdrWriter()).start();
+        new Thread(new SmCdrWriter()).start();
     }
 }

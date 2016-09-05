@@ -17,6 +17,7 @@ import java.util.Date;
 import java.util.List;
 
 public class SqsMessageReceiver implements Runnable {
+    private static final String SMCDR = "smcdr";
     private final AmazonSQSClient sqs;
     private final String queueName;
     private boolean running;
@@ -36,22 +37,20 @@ public class SqsMessageReceiver implements Runnable {
             List<Message> messages = sqs.receiveMessage(receiveMessageRequest).getMessages();
 
             for (Message message : messages) {
-            	QueueItem item = Jackson.fromJsonString(message.getBody(), QueueItem.class);
-            	SmcdrData smcdrData = new SmcdrData();
-            	smcdrData.setOriginator(item.getOriginator());
-            	smcdrData.setDestination(item.getDestination());
-            	smcdrData.setDatetime(new Date(System.currentTimeMillis()).toString());
-            	smcdrData.setUserData(item.getUserData());
+                System.out.println("Received message with: " + message.getBody());
+                QueueItem item = Jackson.fromJsonString(message.getBody(), QueueItem.class);
+            	SmCdrData smCdrData = new SmCdrData();
+            	smCdrData.setOriginator(item.getOriginator());
+            	smCdrData.setDestination(item.getDestination());
+            	smCdrData.setDatetime(new Date(System.currentTimeMillis()).toString());
+            	smCdrData.setUserData(item.getUserData());
             	
-            	dynamoDB.save(smcdrData);
-            	Metrics.METRIC_REGISTRY.counter("smcdr").inc();
+            	dynamoDB.save(smCdrData);
+            	Metrics.METRIC_REGISTRY.counter(SMCDR).inc();
             	
-            	
-                System.out.println("    Body:          " + message.getBody());
                 // We must delete the message from the queue
                 sqs.deleteMessage(new DeleteMessageRequest().withQueueUrl(queueName).withReceiptHandle(message.getReceiptHandle()));
             }
-
         }
     }
 
